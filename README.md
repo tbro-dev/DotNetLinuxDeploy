@@ -40,7 +40,8 @@ This repository contains a Bash script (`startnet.sh`) designed to automate the 
    ```bash
       sudo apt install dos2unix
       dos2unix ./startnet.sh
-
+    ```
+    
    Follow the on-screen prompts to enter your applications name and your user name when requested. These inputs are crucial for setting up the environment correctly.
 
 ## What the Script Does
