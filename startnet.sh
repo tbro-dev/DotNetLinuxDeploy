@@ -5,6 +5,9 @@ read -p "Enter your applications name: " YOUR_APP_NAME
 echo -e "=============================================================="
 read -p "Enter your user name: " YOUR_USER_NAME
 echo -e "=============================================================="
+echo -e "=============================================================="
+read -p "Enter the dotnet version to install (e.g., 6.0): " DOTNET_VERSION
+echo -e "=============================================================="
 
 # Define your application's name and username variables for easy replacement
 #YOUR_APP_NAME="YourActualAppName" # Replace YourActualAppName with your app's name
@@ -16,10 +19,10 @@ set -e
 #Installing with APT can be done with a few commands. Before you install .NET, run the following commands to add the Microsoft package signing key to your list of trusted keys and add the package repository.
 
 # Get Ubuntu version
-declare repo_version=$(if command -v lsb_release &> /dev/null; then lsb_release -r -s; else grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"'; fi)
+declare REPO_VERSION=$(if command -v lsb_release &> /dev/null; then lsb_release -r -s; else grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"'; fi)
 
 # Download Microsoft signing key and repository
-wget https://packages.microsoft.com/config/ubuntu/$repo_version/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+wget https://packages.microsoft.com/config/ubuntu/$REPO_VERSION/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 
 # Install Microsoft signing key and repository
 sudo dpkg -i packages-microsoft-prod.deb
@@ -35,7 +38,7 @@ wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
 
 chmod +x ./dotnet-install.sh
 
-./dotnet-install.sh --version latest
+./dotnet-install.sh --version ${DOTNET_VERSION}
 
 # Check .NET installation
 dotnet --info
