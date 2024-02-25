@@ -1,4 +1,4 @@
-# Startnet Script for .NET Application with Nginx
+# Startnet Script for .NET Application on Linux
 
 This repository contains a Bash script (`startnet.sh`) designed to automate the setup process of a .NET application environment on an Ubuntu server. This includes installing the .NET SDK, runtime, ASP.NET Core runtime, and configuring Nginx as a reverse proxy to forward requests to the .NET application. This project is a fork of DotNetLinuxDeploy: https://github.com/mzand111/DotNetLinuxDeploy
 
