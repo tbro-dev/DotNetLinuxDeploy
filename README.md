@@ -1,66 +1,72 @@
-# DotNetLinuxDeploy
-Files related to a sample video created to help .Net developers to publish a simple .Net web app to Linux server
+# Startnet Script for .NET Application with Nginx
 
-* [The tutorial](https://youtu.be/cpkX9mScZEU)
-  
-* To learn `nano` (Command-line text editor used here)  you can wath [this 5 min video](https://www.youtube.com/watch?v=NV9PyPJKqH4) 
+This repository contains a Bash script (`startnet.sh`) designed to automate the setup process of a .NET application environment on an Ubuntu server. This includes installing the .NET SDK, runtime, ASP.NET Core runtime, and configuring Nginx as a reverse proxy to forward requests to the .NET application. This project is a fork of DotNetLinuxDeploy: https://github.com/mzand111/DotNetLinuxDeploy
 
-* [WinSCP website](https://winscp.net)
+## Prerequisites
 
+- A server running Ubuntu.
+- Sudo privileges on the server.
 
-# Commands used in the video
+## How to Use
 
-1-`sudo apt-get update`
+1. **Clone the Repository**
 
-2-`sudo apt-get install dotnet-sdk-7.0`
+   First, clone this repository to your server:
 
-3-`sudo apt-get install dotnet-runtime-7.0`
+   ```bash
+   git clone <repository-url>
+   cd <repository-name>
+   ```
 
-4-`sudo apt-get install aspnetcore-runtime-7.0`
+  ...or clone and move the startnet.sh script to your Ubuntu server:
 
-5-`dotnet --info`
+2. **Make the Script Executable**
 
-6-`sudo apt-get install nginx`
+   Change the permission of the script to make it executable:
 
-7-`sudo nano /etc/nginx/sites-available/default`
+   ```bash
+   chmod +x startnet.sh
+   ```
 
-```
-   location / {
-       proxy_pass http://localhost:5000;
-       proxy_http_version 1.1;
-       proxy_set_header Upgrade $http_upgrade;
-       proxy_set_header Connection keep-alive;
-       proxy_set_header Host $host;
-       proxy_cache_bypass $http_upgrade;
-       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-       proxy_set_header X-Forwarded-Proto $scheme;
-   }
-```
+3. **Run the Script**
 
-8-
+   Execute the script by running:
 
-  `cd /var/www`
-  
-  `sudo mkdir app`
-  
-  `sudo chmod 777 app`
-   
-  `sudo chown [UserName] app`
+   ```bash
+   ./startnet.sh
+   ```
+    If you encounter the error: " /bin/bash^M: bad interpreter: No such file or directory". Run the script below:
 
-9- 
+   ```bash
+      sudo apt install dos2unix
+      dos2unix ./startnet.sh
 
-  `cd /var/www/app`
-  
-  `sudo dotnet [YourAppName].dll`
+   Follow the on-screen prompts to enter your applications name and your user name when requested. These inputs are crucial for setting up the environment correctly.
 
-10-`nano /etc/systemd/system/[YourAppName].service` and then use the `LinuxWebAppTest.service` to create your file. Replace LinuxWebAppTest with your app's name
+## What the Script Does
 
+Here's a breakdown of the tasks performed by `startnet.sh`:
 
-11-
+- Prompts you for your application's name and your user name.
+- Installs the .NET SDK, runtime, and ASP.NET Core runtime using the Microsoft package signing key and package repository.
+- Installs Nginx and configures it to forward requests to your .NET application.
+- Sets up a directory for your application and configures the necessary permissions.
+- Creates a systemd service file for your application, enabling and starting the service.
+- Reloads Nginx to apply the configuration changes.
 
-`sudo systemctl enable [YourAppName].service`
+## Manual Steps
 
+After running the script, you need to manually deploy your .NET application:
 
-`sudo systemctl start [YourAppName].service`
+- Copy your application to `/var/www/app`.
+- Run `sudo dotnet <YourAppName>.dll` inside `/var/www/app`.
 
-12-`sudo nginx -s reload`
+## Final Notes
+
+- The script is designed for use on Ubuntu and has been tested with Ubuntu 20.04 LTS.
+- Ensure you have sudo privileges on your server to run the script successfully.
+- Modify the script according to your specific needs or Ubuntu version if necessary.
+
+For any issues or contributions, please open an issue or a pull request in this repository.
+
+---
