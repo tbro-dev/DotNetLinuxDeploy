@@ -6,14 +6,8 @@ echo -e "=============================================================="
 read -p "Enter your user name: " YOUR_USER_NAME
 echo -e "=============================================================="
 
-# Define your application's name and username variables for easy replacement
-#YOUR_APP_NAME="YourActualAppName" # Replace YourActualAppName with your app's name
-#YOUR_USER_NAME="YourActualUserName" # Replace YourActualUserName with your username
-
-# Exit script on error
+# Ir error then exit script
 set -e
-
-#Installing with APT can be done with a few commands. Before you install .NET, run the following commands to add the Microsoft package signing key to your list of trusted keys and add the package repository.
 
 # Get Ubuntu version
 declare repo_version=$(if command -v lsb_release &> /dev/null; then lsb_release -r -s; else grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"'; fi)
@@ -32,12 +26,27 @@ sudo apt-get update
 
 # Install .NET SDK, runtime, and ASP.NET Core runtime
 wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
-
 chmod +x ./dotnet-install.sh
-
 ./dotnet-install.sh --version latest
 
-# Check .NET installation
+# Check if dotnet is installed if not then install with snap
+if ! command -v dotnet &> /dev/null; then
+    echo ".NET Core SDK not found. Attempting to install via Snap..."
+
+    # Install Snap and the latest .NET Core SDK using Snap
+    sudo apt update && sudo apt install snapd -y
+    sudo snap install dotnet-sdk --classic
+
+    # Create a symlink to use 'dotnet' command directly, if it doesn't already exist
+    if [ ! -f /usr/bin/dotnet ]; then
+        sudo ln -s /snap/dotnet-sdk/current/dotnet /usr/bin/dotnet
+    fi
+
+    echo ".NET Core SDK installed successfully."
+else
+    echo ".NET Core SDK is already installed."
+fi
+
 dotnet --info
 
 # Install Nginx
